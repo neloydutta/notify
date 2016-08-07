@@ -4,12 +4,23 @@ var fs = require('fs');
 var path = require('path');
 var mongoose = require('mongoose');
 
+
+
+
 var app = express();
 app.use(bodyParser.urlencoded({
   extended: true,
   keepExtensions:true,
   uploadDir:'./uploads'
 }));
+
+
+var mkdirp = require('mkdirp');
+    
+mkdirp('./uploads', function (err) {
+    if (err) console.error(err)
+    else console.log('Folder Available!')
+});
 
 var db = mongoose.connection;
 
@@ -40,7 +51,7 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 var cloudinary = require('cloudinary');
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 8000;
 
 cloudinary.config({ 
   cloud_name: 'neloydutta', 

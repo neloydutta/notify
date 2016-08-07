@@ -17,6 +17,7 @@
     "cloudinary": "^1.4.1",
     "express": "^4.14.0",
     "fs": "0.0.2",
+    "mkdirp": "^0.5.1",
     "mongoose": "^4.5.8",
     "multer": "^1.2.0",
     "path": "^0.12.7"
