@@ -1,20 +1,88 @@
-<!DOCTYPE html>
-<html>
+<html ng-app="myApp">
 <head>
     <title>Upload :p</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script> 
+    <script src="http://maps.googleapis.com/maps/api/js"></script>
+    <script src="/exif.js"></script>
+    
+    <script>
+        var app = angular.module("myApp", []);
+        app.controller("myAppCtrl", function($http, $scope){
+            $scope.location=true;
+            $scope.doYourThing = function(){
+                alert(arguments[0]+" "+arguments[1]);
+                $http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng='+arguments[0]+','+arguments[1]).then(function(response) {
+                        console.log(response);
+                    });
+            }
+        });
+    </script>
+
+    <script>
+    function initializeMap() {
+        latLon = new google.maps.LatLng(arguments[0],arguments[1]);
+        var mapProp = {
+            center:latLon,
+            zoom:15,
+            mapTypeId:google.maps.MapTypeId.ROADMAP
+        };
+        var map=new google.maps.Map(document.getElementById("googleMap"), mapProp);
+    
+        var marker = new google.maps.Marker({
+            position: latLon,
+            title:"Your Location!"
+        });
+
+        // To add the marker to the map, call setMap();
+        marker.setMap(map);
+    }
+    google.maps.event.addDomListener(window, 'load', initializeMap);
+    </script>
 </head>
-<body>
+<body ng-controller="myAppCtrl">
     <h1>Test Upload</h1>
     <form method="post" enctype="multipart/form-data" action="/">
-        Picture: <input type="file" name="file"><br>
-        Location: <input type="text" name="location"><br>
+        Picture: <input type="file" id="file-input" name="file"><br>
+        <span>
+        Location: <input type="text"  name="location" value="initial Value"><br>
+        <input type="hidden" id="lat" name="lattitude">
+        <input type="hidden" id="lon" name="longitude">
+        </span>
+        <span>
         <input type="submit">
     </form>
+    <div id="googleMap" style="width:500px;height:380px;"></div>
 </body>
+<script>
+        document.getElementById("file-input").onchange = function(e) {
+            EXIF.getData(e.target.files[0], function() {
+                //alert(EXIF.pretty(this));
+                exif = EXIF.getAllTags(this);
+                console.log(exif);
+                var lat = exif.GPSLatitude || "N";
+                var lon = exif.GPSLongitude || "E";
+ 
+                //Convert coordinates to WGS84 decimal
+                var latRef = exif.GPSLatitudeRef;  
+                var lonRef = exif.GPSLongitudeRef;
+                console.log(lat+" "+lon+" "+latRef+" "+lonRef);
+                lat = (lat[0] + lat[1]/60 + lat[2]/3600) * (latRef == "N" ? 1 : -1);  
+                lon = (lon[0] + lon[1]/60 + lon[2]/3600) * (lonRef == "W" ? -1 : 1); 
+                console.log(lat+" "+lon);
+                var ele = document.getElementById('lat');
+                ele.value = lat;
+                ele = document.getElementById('lon');
+                ele.value = lon;
+                initializeMap(lat, lon);
+                angular.element(document.getElementById('file-input')).scope().doYourThing(lat, lon);
+            });
+        }
+    </script>
 </html>

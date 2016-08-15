@@ -8,6 +8,8 @@ var mongoose = require('mongoose');
 
 
 var app = express();
+
+app.use(express.static('public'));
 app.use(bodyParser.urlencoded({
   extended: true,
   keepExtensions:true,
