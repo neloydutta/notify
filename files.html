@@ -19,7 +19,7 @@
             $scope.location=true;
             $scope.doYourThing = function(){
                 alert(arguments[0]+" "+arguments[1]);
-                $http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+arguments[0]+','+arguments[1]).then(function(response) {
+                $http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+arguments[0]+','+arguments[1]+'&key=AIzaSyBTGmLbWfwhURUv7R1If3nOXYb8VCMjW5c').then(function(response) {
                         console.log(response);
                     });
             }
