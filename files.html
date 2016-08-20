@@ -22,6 +22,9 @@
                 if(!(isNaN(arguments[0])&&isNaN(arguments[1]))){
                     $scope.location=false;
                 }
+                else{
+                    $scope.location=true;
+                }
                 $http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+arguments[0]+','+arguments[1]+'&key=AIzaSyBTGmLbWfwhURUv7R1If3nOXYb8VCMjW5c').then(function(response) {
                         console.log(response);
                     });
