@@ -23,11 +23,13 @@
         <table border="1">
             <tr>
                 <td>Image</td>
-                <td>Location</td>
+                <td>Lattitude</td>
+                <td>Longitude</td>
             </tr>
             <tr ng-repeat="x in allOfThem">
                 <td><img src={{x.imgurl}} alt="Smiley face" height="100" width="150"></td>
-                <td>{{x.location}}</td>
+                <td>{{x.lat}}</td>
+                <td>{{x.lon}}</td>
             </tr>
         </table>
     </body>

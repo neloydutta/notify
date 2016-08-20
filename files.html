@@ -25,6 +25,10 @@
                 else{
                     $scope.location=true;
                 }
+                var ele = document.getElementById('lattitue');
+                ele.value = arguments[0];
+                ele = document.getElementById('longitude');
+                ele.value = arguments[1];
                 $http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+arguments[0]+','+arguments[1]+'&key=AIzaSyBTGmLbWfwhURUv7R1If3nOXYb8VCMjW5c').then(function(response) {
                         console.log(response);
                     });

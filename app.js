@@ -36,7 +36,9 @@ mongoose.connect('mongodb://neloydutta:laddu1993@ds042379.mlab.com:42379/hydhack
 
 var listOfUrls = mongoose.model('listOfUrl', {
     imgurl: String,
-    location: String
+    location: String,
+    lat: String,
+    lon: String
 });
 
 var multer  = require('multer')
@@ -80,7 +82,9 @@ app.post('/', upload.single('file'),function (req, res) {
         fs.unlink(path.resolve('./uploads/'+req.file.filename));
         var doc = new listOfUrls({
             imgurl:result.secure_url,
-            location: req.body.location
+            location: req.body.location,
+            lat: req.body.lattitude,
+            lon: req.body.longitude
         });
 
         doc.save(function (err, data) {
