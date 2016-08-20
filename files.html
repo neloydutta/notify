@@ -17,13 +17,17 @@
         var app = angular.module("myApp", []);
         app.controller("myAppCtrl", function($http, $scope){
             $scope.location=true;
+            $scope.hideSubmit = true;
             $scope.doYourThing = function(){
                 //alert(arguments[0]+" "+arguments[1]);
                 if(!(isNaN(arguments[0])&&isNaN(arguments[1]))){
                     $scope.location=false;
+                    $scope.hideSubmit=false;
                 }
                 else{
                     $scope.location=true;
+                    $scope.hideSubmit=true;
+                    alert("Picture Must contain Geo-Tag Info!:p");
                 }
                 var ele = document.getElementById('lat');
                 ele.value = arguments[0];
@@ -62,12 +66,11 @@
     <form method="post" enctype="multipart/form-data" action="/">
         Picture: <input type="file" id="file-input" name="file"><br>
         <span>
-        Location: <input type="text"  name="location" value="initial Value"><br>
+        <!--Location: <input type="text"  name="location" value="initial Value"><br>-->
         <input type="hidden" id="lat" name="lattitude">
         <input type="hidden" id="lon" name="longitude">
         </span>
-        <span>
-        <input type="submit">
+        <input type="submit" ng-hide="hideSubmit">
     </form>
     <div ng-hide="location" id="googleMap" style="width:500px;height:380px;"></div>
 </body>

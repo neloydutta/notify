@@ -1,6 +1,7 @@
 <html ng-app="someapp">
     <head>
         <title>List of idkw</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <!-- Optional theme -->
@@ -8,6 +9,8 @@
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script> 
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTGmLbWfwhURUv7R1If3nOXYb8VCMjW5c&callback=initializeMap"
+    async defer></script>
         <script>
             var app = angular.module("someapp", []);
             app.controller("someappCtrl", function($http, $scope){
@@ -17,6 +20,35 @@
                         console.log($scope.allOfThem);
                     });
             });
+        </script>
+        <script>
+            function initializeMap() {
+                //alert(arguments[0]+" "+arguments[1]);
+                latLon = new google.maps.LatLng(arguments[0],arguments[1]);
+                var mapProp = {
+                    center:latLon,
+                    zoom:15,
+                    mapTypeId:google.maps.MapTypeId.ROADMAP
+                };
+                var map=new google.maps.Map(document.getElementById("googleMap"), mapProp);
+            
+                var marker = new google.maps.Marker({
+                    position: latLon,
+                    title:"Your Location!"
+                });
+
+                // To add the marker to the map, call setMap();
+                marker.setMap(map);
+            }
+            google.maps.event.addDomListener(window, 'load', initializeMap);
+        </script>
+        <script>
+            function func(){
+                //alert(arguments[0]);
+                var lat = document.getElementById(arguments[0]+''+1);
+                var lon = document.getElementById(arguments[0]+''+2);
+                initializeMap(lat.value, lon.value);
+            }
         </script>
     </head>
     <body ng-controller="someappCtrl">
@@ -30,7 +62,12 @@
                 <td><img src={{x.imgurl}} alt="Smiley face" height="100" width="150"></td>
                 <td>{{x.lat}}</td>
                 <td>{{x.lon}}</td>
+                <td><input type="button" value="ClickToSeeLocation!" onclick="func({{$index+1}})">
+                    <input type="hidden" id="{{$index+1}}1" value="{{x.lat}}">
+                    <input type="hidden" id="{{$index+1}}2" value="{{x.lon}}">
+                </td>
             </tr>
         </table>
+        <div id="googleMap" style="width:500px;height:380px;"></div>
     </body>
 </html>
