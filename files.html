@@ -16,9 +16,12 @@
     <script>
         var app = angular.module("myApp", []);
         app.controller("myAppCtrl", function($http, $scope){
-            $scope.location=true;
+            $scope.location=false;
             $scope.doYourThing = function(){
-                alert(arguments[0]+" "+arguments[1]);
+                //alert(arguments[0]+" "+arguments[1]);
+                if(!(isNaN(arguments[0])&&isNaN(arguments[1]))){
+                    $scope.location=true;
+                }
                 $http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+arguments[0]+','+arguments[1]+'&key=AIzaSyBTGmLbWfwhURUv7R1If3nOXYb8VCMjW5c').then(function(response) {
                         console.log(response);
                     });
