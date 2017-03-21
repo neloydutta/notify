@@ -111,15 +111,6 @@ app.get('/listall', function(req, res){
   res.sendFile(__dirname + '/list.html');
 });
 
-app.post('/webhook', function(req, res){
-  res.status(200).json({
-    "speech": "Barack Hussein Obama II is the 44th and current President of the United States.",
-    "displayText": "Barack Hussein Obama II is the 44th and current President of the United States, and the first African American to hold the office. Born in Honolulu, Hawaii, Obama is a graduate of Columbia University   and Harvard Law School, where ",
-    "data": {},
-    "contextOut": [],
-    "source": "DuckDuckGo"
-    });
-});
 
 app.listen(port, function () {
     console.log("listening to port: " + port);
